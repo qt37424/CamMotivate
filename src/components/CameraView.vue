@@ -25,6 +25,7 @@ import {
 
 import { detectOpenPalm } from "../gestures/detectOpenPalm";
 import { drawHeart } from "../gestures/drawHeart";
+import { drawLandmarks } from "../gestures/drawLandmarks";
 
 const videoRef = ref(null);
 const canvasRef = ref(null);
@@ -101,6 +102,13 @@ onMounted(async () => {
         (landmarks) => {
           const openPalm =
             detectOpenPalm(landmarks);
+
+          drawLandmarks(
+            ctx,
+            landmarks,
+            canvas.width,
+            canvas.height
+          );
 
           if (openPalm) {
             [4, 8, 12, 16, 20].forEach(
