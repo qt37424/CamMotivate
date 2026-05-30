@@ -1,7 +1,7 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <HelloWorld />
+  <CameraView />
 </template>
+
+<script setup>
+import CameraView from "./components/CameraView.vue";
+</script>
