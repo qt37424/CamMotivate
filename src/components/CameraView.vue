@@ -26,6 +26,7 @@ import {
 import { detectOpenPalm } from "../gestures/detectOpenPalm";
 import { drawHeart } from "../gestures/drawHeart";
 import { drawLandmarks } from "../gestures/drawLandmarks";
+import { drawConnections } from "../gestures/connectionLine";
 
 const videoRef = ref(null);
 const canvasRef = ref(null);
@@ -104,6 +105,12 @@ onMounted(async () => {
             detectOpenPalm(landmarks);
 
           drawLandmarks(
+            ctx,
+            landmarks,
+            canvas.width,
+            canvas.height
+          );
+          drawConnections(
             ctx,
             landmarks,
             canvas.width,

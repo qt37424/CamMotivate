@@ -4,18 +4,18 @@ export function drawLandmarks(
   width,
   height
 ) {
-  landmarks.forEach((point) => {
-    ctx.beginPath();
+  landmarks.forEach((point,index)=>{
 
-    ctx.arc(
-      point.x * width,
-      point.y * height,
-      5,
-      0,
-      Math.PI * 2
-    );
+  const x = point.x * width;
+  const y = point.y * height;
 
-    ctx.fillStyle = "lime";
-    ctx.fill();
-  });
+  ctx.beginPath();
+  ctx.arc(x,y,5,0,Math.PI*2);
+  ctx.fillStyle = "lime";
+  ctx.fill();
+
+  ctx.fillStyle = "red";
+  ctx.font = "12px Arial";
+  ctx.fillText(index,x+5,y+5);
+});
 }
