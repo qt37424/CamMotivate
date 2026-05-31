@@ -37,20 +37,32 @@ export function drawFramePoints(
   width,
   height
 ){
-  Object.values(points)
-    .forEach((point)=>{
+  ctx.beginPath();
 
-      ctx.beginPath();
+    ctx.moveTo(
+      points.indexLeft.x * width,
+      points.indexLeft.y * height
+    );
 
-      ctx.arc(
-        point.x * width,
-        point.y * height,
-        12,
-        0,
-        Math.PI*2
-      );
+    ctx.lineTo(
+      points.indexRight.x * width,
+      points.indexRight.y * height
+    );
 
-      ctx.fillStyle = "red";
-      ctx.fill();
-    });
+    ctx.lineTo(
+      points.thumbRight.x * width,
+      points.thumbRight.y * height
+    );
+
+    ctx.lineTo(
+      points.thumbLeft.x * width,
+      points.thumbLeft.y * height
+    );
+
+    ctx.closePath();
+
+    ctx.strokeStyle = "red";
+    ctx.lineWidth = 4;
+
+    ctx.stroke();
 }
