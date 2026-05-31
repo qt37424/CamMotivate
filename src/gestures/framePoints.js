@@ -39,30 +39,30 @@ export function drawFramePoints(
 ){
   ctx.beginPath();
 
-    ctx.moveTo(
-      points.indexLeft.x * width,
-      points.indexLeft.y * height
-    );
+  ctx.moveTo(
+    points.indexLeft.x * width,
+    points.indexLeft.y * height
+  );
 
-    ctx.lineTo(
-      points.indexRight.x * width,
-      points.indexRight.y * height
-    );
+  ctx.lineTo(
+    points.indexRight.x * width,
+    points.indexRight.y * height
+  );
 
-    ctx.lineTo(
-      points.thumbRight.x * width,
-      points.thumbRight.y * height
-    );
+  ctx.lineTo(
+    points.thumbRight.x * width,
+    points.thumbRight.y * height
+  );
 
-    ctx.lineTo(
-      points.thumbLeft.x * width,
-      points.thumbLeft.y * height
-    );
+  ctx.lineTo(
+    points.thumbLeft.x * width,
+    points.thumbLeft.y * height
+  );
 
-    ctx.closePath();
+  ctx.closePath();
 
-    ctx.strokeStyle = "red";
-    ctx.lineWidth = 4;
+  ctx.strokeStyle = "red";
+  ctx.lineWidth = 4;
 
-    ctx.stroke();
+  ctx.stroke();
 }
