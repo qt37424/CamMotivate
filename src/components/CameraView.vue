@@ -25,8 +25,10 @@ import {
 
 import { detectOpenPalm } from "../gestures/detectOpenPalm";
 import { drawHeart } from "../gestures/drawHeart";
-import { drawLandmarks } from "../gestures/drawLandmarks";
-import { drawConnections } from "../gestures/connectionLine";
+// import { drawLandmarks } from "../gestures/drawLandmarks";
+// import { drawConnections } from "../gestures/drawConnectionLine";
+import { drawHandLabel } from "../gestures/drawHandLabel";
+import { getFramePoints, drawFramePoints } from "../gestures/framePoints";
 
 const videoRef = ref(null);
 const canvasRef = ref(null);
@@ -100,37 +102,55 @@ onMounted(async () => {
       result.landmarks.length
     ) {
       result.landmarks.forEach(
-        (landmarks) => {
-          const openPalm =
-            detectOpenPalm(landmarks);
+        (landmarks, index) => {
+          const openPalm = detectOpenPalm(landmarks);
 
-          drawLandmarks(
+          const handType = result.handednesses[index][0].categoryName;
+          const framePoints = getFramePoints(result);
+          console.log(handType);
+
+          // drawLandmarks(
+          //   ctx,
+          //   landmarks,
+          //   canvas.width,
+          //   canvas.height
+          // );
+          // drawConnections(
+          //   ctx,
+          //   landmarks,
+          //   canvas.width,
+          //   canvas.height
+          // );
+          drawHandLabel(
             ctx,
+            handType,
             landmarks,
             canvas.width,
             canvas.height
           );
-          drawConnections(
-            ctx,
-            landmarks,
-            canvas.width,
-            canvas.height
-          );
 
-          if (openPalm) {
-            [4, 8, 12, 16, 20].forEach(
-              (tipIndex) => {
-                const point =
-                  landmarks[tipIndex];
+          // if (openPalm) {
+          //   [4, 8, 12, 16, 20].forEach(
+          //     (tipIndex) => {
+          //       const point =
+          //         landmarks[tipIndex];
 
-                drawHeart(
-                  ctx,
-                  point.x *
-                    canvas.width,
-                  point.y *
-                    canvas.height
-                );
-              }
+          //       drawHeart(
+          //         ctx,
+          //         point.x *
+          //           canvas.width,
+          //         point.y *
+          //           canvas.height
+          //       );
+          //     }
+          //   );
+          // }
+          if(framePoints && openPalm){
+            drawFramePoints(
+              ctx,
+              framePoints,
+              canvas.width,
+              canvas.height
             );
           }
         }
