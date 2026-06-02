@@ -17,7 +17,8 @@ import { drawHeart } from "../gestures/drawHeart";
 // import { drawConnections } from "../gestures/drawConnectionLine";
 import { drawHandLabel } from "../gestures/drawHandLabel";
 import { getFramePoints, drawFramePoints } from "../gestures/framePoints";
-import { isFrameClosed, getFrameWidth } from "../gestures/isFrameClosed";
+import { isFrameClosed } from "../gestures/isFrameClosed";
+import { getFrameWidth, getFrameCenter } from "../gestures/calculation";
 import img1 from "../assets/1.jpg";
 import img2 from "../assets/2.jpg";
 import img3 from "../assets/3.jpg";
@@ -32,6 +33,8 @@ onMounted(async () => {
   const video = videoRef.value;
   const canvas = canvasRef.value;
   const ctx = canvas.getContext("2d");
+  const imageList = [img1, img2, img3, img4, img5];
+  let image = null;
 
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
@@ -60,7 +63,6 @@ onMounted(async () => {
 
     numHands: 2,
   });
-  const imageList = [img1, img2, img3, img4, img5];
 
   async function render() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -91,7 +93,6 @@ onMounted(async () => {
           let previousDistance = 0;
           let gestureState = "IDLE";
 
-
           drawFramePoints(ctx, framePoints, canvas.width, canvas.height);
 
           if (gestureState === "IDLE" && closed) {
@@ -102,25 +103,42 @@ onMounted(async () => {
           if (gestureState === "FRAME_READY") {
             const delta = currentDistance - previousDistance;
             if (delta > 0.12) {
+              const randomImage = imageList[Math.floor(Math.random() * imageList.length)];
+              image = new Image();
+              image.src = randomImage;
               gestureState = "IMAGE_OPENED";
-              // console.log(gestureState);
             }
           }
 
           if (gestureState == "IMAGE_OPENED") {
-            const randomImage = imageList[Math.floor(Math.random() * imageList.length)];
-            const image = new Image();
-            image.src = randomImage;
-            ctx.drawImage(image, 300, 100, 400, 400);
+            DisplayImage(framePoints, image)
+            // ctx.drawImage(image, 300, 100, 400, 400);
+            gestureState = "IMAGE_TRACKING"
             console.log(gestureState);
-            console.log(image);
           }
 
-          if (closed) {
+          if (gestureState === "IMAGE_TRACKING" && closed) {
+            gestureState = "IDLE"
+            image = null;
             console.log("FRAME_CLOSED");
           }
         }
       });
+    }
+
+    function DisplayImage(framePoints, image) {
+      const center = getFrameCenter(framePoints);
+      const frameWidth = getFrameWidth(framePoints);
+      const imageSize = frameWidth * canvas.width * 1.2;
+
+      ctx.beginPath();
+      ctx.drawImage(
+        image, 
+        center.x * canvas.width - imageSize / 2,
+        center.y * canvas.height - imageSize / 2,
+        imageSize,
+        imageSize
+      );
     }
 
     requestAnimationFrame(render);
