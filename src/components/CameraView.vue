@@ -18,7 +18,7 @@ import { drawHeart } from "../gestures/drawHeart";
 import { drawHandLabel } from "../gestures/drawHandLabel";
 import { getFramePoints, drawFramePoints } from "../gestures/framePoints";
 import { isFrameClosed } from "../gestures/isFrameClosed";
-import { getFrameWidth, getFrameCenter } from "../gestures/calculation";
+import { getFrameWidth, getFrameCenter, getFrameInfo } from "../gestures/calculation";
 import img1 from "../assets/1.jpg";
 import img2 from "../assets/2.jpg";
 import img3 from "../assets/3.jpg";
@@ -127,17 +127,29 @@ onMounted(async () => {
     }
 
     function DisplayImage(framePoints, image) {
-      const center = getFrameCenter(framePoints);
-      const frameWidth = getFrameWidth(framePoints);
-      const imageSize = frameWidth * canvas.width * 1.2;
+      const frameInfo = getFrameInfo(framePoints);
+      let smoothedCenterX = 0;
+      let smoothedCenterY = 0;
 
-      ctx.beginPath();
+      smoothedCenterX = smoothedCenterX * 0.8 + frameInfo.centerX * 0.2;
+      smoothedCenterY = smoothedCenterY * 0.8 + frameInfo.centerY * 0.2;
+
+      ctx.strokeStyle = "cyan";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(
+        frameInfo.centerX * canvas.width - frameInfo.width * canvas.width / 2,
+        frameInfo.centerY * canvas.height - frameInfo.height * canvas.height / 2,
+        frameInfo.width * canvas.width,
+        frameInfo.height * canvas.height
+      );
+
+      // ctx.beginPath();
       ctx.drawImage(
-        image, 
-        center.x * canvas.width - imageSize / 2,
-        center.y * canvas.height - imageSize / 2,
-        imageSize,
-        imageSize
+        image,
+        frameInfo.centerX * canvas.width - frameInfo.width * canvas.width / 2,
+        frameInfo.centerY * canvas.height - frameInfo.height * canvas.height / 2,
+        frameInfo.width * canvas.width,
+        frameInfo.height * canvas.height
       );
     }
 
